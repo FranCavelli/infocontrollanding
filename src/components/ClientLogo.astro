@@ -1,0 +1,47 @@
+---
+interface Props {
+  name: string;
+  variant?: number;
+}
+const { name, variant = 0 } = Astro.props;
+
+// 6 íconos geométricos rotativos, monocromos
+const ICONS: Record<number, string> = {
+  0: `<path d="M2 22 L12 2 L22 22 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" fill="none"/>`,
+  1: `<path d="M12 2 L22 7 L22 17 L12 22 L2 17 L2 7 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" fill="none"/>`,
+  2: `<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/>`,
+  3: `<rect x="4" y="4" width="16" height="16" transform="rotate(45 12 12)" stroke="currentColor" stroke-width="2.2" fill="none"/>`,
+  4: `<path d="M5 4v16M12 4v16M19 4v16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>`,
+  5: `<path d="M3 18 L12 4 L21 18" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" fill="none"/><path d="M7 18 L12 10 L17 18" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" fill="none" opacity="0.5"/>`,
+};
+
+const iconHtml = ICONS[variant % 6];
+
+// Tamaño tipográfico variable según largo del nombre
+const len = name.length;
+const fontSize = len > 14 ? 13 : len > 10 ? 15 : 17;
+const letterSpacing = len > 12 ? 1.5 : 2.2;
+---
+
+<svg
+  viewBox="0 0 200 50"
+  class="h-full w-full text-current"
+  fill="currentColor"
+  aria-label={name}
+  role="img"
+>
+  <g transform="translate(8, 13)">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" set:html={iconHtml} />
+  </g>
+  <text
+    x="42"
+    y="32"
+    font-family="Space Grotesk, Inter, sans-serif"
+    font-weight="700"
+    font-size={fontSize}
+    letter-spacing={letterSpacing}
+    fill="currentColor"
+  >
+    {name.toUpperCase()}
+  </text>
+</svg>

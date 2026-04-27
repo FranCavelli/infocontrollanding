@@ -1,0 +1,103 @@
+---
+import Globe from "./Globe.tsx";
+import { getT, type Locale } from "~/i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = "es" } = Astro.props;
+const t = getT(locale).hero;
+---
+
+<section class="relative pt-32 pb-20 md:pt-40 md:pb-28">
+  <div class="container-pad">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+      <div class="reveal max-w-2xl">
+        <span class="eyebrow">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[color:var(--color-brand)] opacity-75"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-[color:var(--color-brand)]"></span>
+          </span>
+          {t.eyebrow}
+        </span>
+
+        <h1 class="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-[68px]">
+          <span class="text-gradient">{t.titleLead}</span><br />
+          {t.titleRest1}
+          <span class="relative inline-block">
+            {t.titleHighlight}
+            <svg
+              class="absolute left-0 -bottom-2 h-3 w-full text-[color:var(--color-brand)]/60"
+              viewBox="0 0 200 12"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 8 Q 50 1, 100 6 T 198 4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          {t.titleRest2}
+        </h1>
+
+        <p
+          class="mt-7 max-w-xl text-lg md:text-xl"
+          style="color: var(--color-text-muted);"
+        >
+          {t.desc}
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <a href="#contacto" class="btn btn-primary">
+            {t.ctaPrimary}
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#video" class="btn btn-ghost">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M6 4l11 6-11 6V4z" />
+            </svg>
+            {t.ctaSecondary}
+          </a>
+        </div>
+
+        <dl
+          class="mt-12 grid max-w-xl grid-cols-3 gap-6 pt-7"
+          style="border-top: 1px solid var(--border-1);"
+        >
+          <div>
+            <dt class="text-xs uppercase tracking-wider" style="color: var(--color-text-dim);">{t.stats.empresas}</dt>
+            <dd class="mt-1 font-display text-2xl font-bold md:text-3xl" style="color: var(--color-text);">+150</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider" style="color: var(--color-text-dim);">{t.stats.paises}</dt>
+            <dd class="mt-1 font-display text-2xl font-bold md:text-3xl" style="color: var(--color-text);">10</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider" style="color: var(--color-text-dim);">{t.stats.docs}</dt>
+            <dd class="mt-1 font-display text-2xl font-bold md:text-3xl" style="color: var(--color-text);">2M+</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="relative reveal">
+        <div class="pointer-events-none absolute -inset-x-8 -inset-y-12 -z-10 opacity-60 blur-3xl"
+          style="background: radial-gradient(60% 50% at 50% 50%, rgba(11,187,239,0.35), transparent 70%);">
+        </div>
+        <Globe client:load />
+        <div
+          class="mt-4 flex items-center justify-center gap-2 text-xs"
+          style="color: var(--color-text-dim);"
+        >
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--color-brand)]"></span>
+          {t.footnote}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,174 @@
+---
+import ClientLogo from "./ClientLogo.astro";
+import { getT, type Locale } from "~/i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = "es" } = Astro.props;
+const t = getT(locale).clientes;
+
+type Industry =
+  | "mineria"
+  | "energia"
+  | "oilgas"
+  | "banca"
+  | "industria"
+  | "construccion"
+  | "servicios";
+
+const clientes: { name: string; industry: Industry }[] = [
+  { name: "Barrick", industry: "mineria" },
+  { name: "Newmont", industry: "mineria" },
+  { name: "Glencore", industry: "mineria" },
+  { name: "OSSE", industry: "servicios" },
+  { name: "YPF", industry: "oilgas" },
+  { name: "Tenaris", industry: "oilgas" },
+  { name: "Pan American", industry: "oilgas" },
+  { name: "Petrobras", industry: "oilgas" },
+  { name: "Vista", industry: "oilgas" },
+  { name: "Repsol", industry: "oilgas" },
+  { name: "Pampa Energía", industry: "energia" },
+  { name: "Profertil", industry: "energia" },
+  { name: "Holcim", industry: "construccion" },
+  { name: "Loma Negra", industry: "construccion" },
+  { name: "Techint", industry: "construccion" },
+  { name: "Aluar", industry: "industria" },
+  { name: "Acindar", industry: "industria" },
+  { name: "Arcor", industry: "industria" },
+  { name: "Cervecería SF", industry: "industria" },
+  { name: "Banco Galicia", industry: "banca" },
+];
+
+const filters: { key: "all" | Industry; label: string }[] = [
+  { key: "all", label: t.filterAll },
+  { key: "mineria", label: t.industries.mineria },
+  { key: "energia", label: t.industries.energia },
+  { key: "oilgas", label: t.industries.oilgas },
+  { key: "banca", label: t.industries.banca },
+  { key: "industria", label: t.industries.industria },
+  { key: "construccion", label: t.industries.construccion },
+  { key: "servicios", label: t.industries.servicios },
+];
+---
+
+<section id="clientes" class="relative py-24 md:py-32">
+  <div class="container-pad">
+    <div class="reveal mx-auto max-w-3xl text-center">
+      <span class="eyebrow">{t.eyebrow}</span>
+      <h2 class="mt-5 font-display text-3xl font-bold leading-tight md:text-5xl">
+        {t.titleLead} <span class="text-gradient">{t.titleHighlight}</span> {t.titleRest}
+      </h2>
+      <p class="mx-auto mt-5 max-w-xl" style="color: var(--color-text-muted);">
+        {t.desc}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="reveal marquee group relative mt-14 overflow-hidden"
+    style="mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);"
+    data-clientes-marquee
+  >
+    <div class="marquee-track gap-4 will-change-transform">
+      {
+        [...clientes, ...clientes].map((c, i) => (
+          <div
+            class="client-logo flex h-24 w-56 shrink-0 items-center justify-center rounded-2xl border px-6 transition-all duration-500"
+            style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-text-muted);"
+            data-industry={c.industry}
+          >
+            <ClientLogo name={c.name} variant={i} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="container-pad mt-12">
+    <div
+      class="reveal flex flex-wrap items-center justify-center gap-2.5 text-xs"
+      data-filters
+    >
+      {
+        filters.map((f) => (
+          <button
+            type="button"
+            class="filter-chip rounded-full border px-4 py-2 font-medium transition-all"
+            style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-text-muted);"
+            data-filter={f.key}
+            aria-pressed={f.key === "all"}
+          >
+            {f.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .filter-chip[aria-pressed="true"] {
+    background: color-mix(in oklab, var(--color-brand) 15%, transparent) !important;
+    color: var(--color-brand) !important;
+    border-color: color-mix(in oklab, var(--color-brand) 35%, transparent) !important;
+  }
+  .filter-chip:hover {
+    color: var(--color-text);
+    border-color: var(--border-2);
+  }
+
+  /* Cuando el contenedor tiene filtro activo, los logos que no matchean se atenúan */
+  [data-clientes-marquee][data-active-filter]:not([data-active-filter="all"]) .client-logo {
+    filter: grayscale(1);
+    opacity: 0.18;
+  }
+  [data-clientes-marquee][data-active-filter="mineria"] .client-logo[data-industry="mineria"],
+  [data-clientes-marquee][data-active-filter="energia"] .client-logo[data-industry="energia"],
+  [data-clientes-marquee][data-active-filter="oilgas"] .client-logo[data-industry="oilgas"],
+  [data-clientes-marquee][data-active-filter="banca"] .client-logo[data-industry="banca"],
+  [data-clientes-marquee][data-active-filter="industria"] .client-logo[data-industry="industria"],
+  [data-clientes-marquee][data-active-filter="construccion"] .client-logo[data-industry="construccion"],
+  [data-clientes-marquee][data-active-filter="servicios"] .client-logo[data-industry="servicios"] {
+    filter: none;
+    opacity: 1;
+    border-color: color-mix(in oklab, var(--color-brand) 40%, transparent);
+    background: color-mix(in oklab, var(--color-brand) 8%, transparent);
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  const initFilters = () => {
+    const container = document.querySelector<HTMLElement>(
+      "[data-clientes-marquee]"
+    );
+    const group = document.querySelector<HTMLElement>("[data-filters]");
+    if (!container || !group || (group as any).__inited) return;
+    (group as any).__inited = true;
+
+    const buttons = group.querySelectorAll<HTMLButtonElement>(
+      "button[data-filter]"
+    );
+    container.setAttribute("data-active-filter", "all");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.dataset.filter || "all";
+        const current = container.getAttribute("data-active-filter");
+        // Toggle: si clickea el activo (y no es "all"), vuelve a "all"
+        const next = current === key && key !== "all" ? "all" : key;
+        container.setAttribute("data-active-filter", next);
+        buttons.forEach((b) =>
+          b.setAttribute(
+            "aria-pressed",
+            (b.dataset.filter || "all") === next ? "true" : "false"
+          )
+        );
+      });
+    });
+  };
+
+  initFilters();
+  document.addEventListener("astro:page-load", initFilters);
+</script>

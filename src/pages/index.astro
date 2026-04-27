@@ -1,0 +1,29 @@
+---
+import Base from "~/layouts/Base.astro";
+import Header from "~/components/Header.astro";
+import Hero from "~/components/Hero.astro";
+import Servicios from "~/components/Servicios.astro";
+import Funcionalidades from "~/components/Funcionalidades.astro";
+import PorQueEligen from "~/components/PorQueEligen.astro";
+import VideoSection from "~/components/VideoSection.astro";
+import Clientes from "~/components/Clientes.astro";
+import CTA from "~/components/CTA.astro";
+import Footer from "~/components/Footer.astro";
+import { pageFade } from "~/lib/transitions";
+
+const locale = "es" as const;
+---
+
+<Base locale={locale}>
+  <Header locale={locale} />
+  <main transition:animate={pageFade}>
+    <Hero locale={locale} />
+    <Servicios locale={locale} />
+    <PorQueEligen locale={locale} />
+    <Funcionalidades locale={locale} />
+    <VideoSection locale={locale} />
+    <Clientes locale={locale} />
+    <CTA locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</Base>

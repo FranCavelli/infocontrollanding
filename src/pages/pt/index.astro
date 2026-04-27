@@ -1,0 +1,33 @@
+---
+import Base from "~/layouts/Base.astro";
+import Header from "~/components/Header.astro";
+import Hero from "~/components/Hero.astro";
+import Servicios from "~/components/Servicios.astro";
+import Funcionalidades from "~/components/Funcionalidades.astro";
+import PorQueEligen from "~/components/PorQueEligen.astro";
+import VideoSection from "~/components/VideoSection.astro";
+import Clientes from "~/components/Clientes.astro";
+import CTA from "~/components/CTA.astro";
+import Footer from "~/components/Footer.astro";
+import { pageFade } from "~/lib/transitions";
+
+const locale = "pt" as const;
+---
+
+<Base
+  locale={locale}
+  title="Infocontrol — IA aplicada ao controle de Contratados"
+  description="Plataforma SaaS com IA para administrar e auditar a documentação de contratados e RH terceirizado em toda LATAM."
+>
+  <Header locale={locale} />
+  <main transition:animate={pageFade}>
+    <Hero locale={locale} />
+    <Servicios locale={locale} />
+    <Funcionalidades locale={locale} />
+    <PorQueEligen locale={locale} />
+    <VideoSection locale={locale} />
+    <Clientes locale={locale} />
+    <CTA locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</Base>

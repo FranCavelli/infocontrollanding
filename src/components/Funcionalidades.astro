@@ -1,0 +1,83 @@
+---
+import { getT, type Locale } from "~/i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = "es" } = Astro.props;
+const t = getT(locale).funcionalidades;
+
+const iconKeys = [
+  "doc", "ai", "alarm", "id", "map", "shield", "plug", "lock", "graph",
+] as const;
+
+const ICONS: Record<string, string> = {
+  doc: `<path d="M7 3h7l5 5v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/>`,
+  ai: `<path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/><circle cx="12" cy="12" r="4"/>`,
+  alarm: `<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M5 3l-2 2M19 3l2 2M9 21h6"/>`,
+  id: `<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h5M14 14h3"/>`,
+  map: `<path d="M9 3l-6 3v15l6-3 6 3 6-3V3l-6 3z"/><path d="M9 3v15M15 6v15"/>`,
+  shield: `<path d="M12 3l8 3v6c0 4.5-3.4 8.6-8 9-4.6-.4-8-4.5-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/>`,
+  plug: `<path d="M9 2v4M15 2v4M7 7h10v5a5 5 0 0 1-10 0V7zM12 17v5"/>`,
+  lock: `<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>`,
+  graph: `<path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 5-7"/>`,
+};
+---
+
+<section id="funcionalidades" class="relative scroll-mt-28 py-24 md:py-32">
+  <div class="container-pad">
+    <div class="reveal mx-auto max-w-3xl text-center">
+      <span class="eyebrow">{t.eyebrow}</span>
+      <h2 class="mt-5 font-display text-3xl font-bold leading-tight md:text-5xl">
+        {t.titleLead}
+        <span class="text-gradient">{t.titleHighlight}</span>
+      </h2>
+      <p
+        class="mx-auto mt-5 max-w-2xl"
+        style="color: var(--color-text-muted);"
+      >
+        {t.desc}
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      t.items.map((f, i) => (
+          <article
+            class="reveal group relative flex flex-col gap-5 overflow-hidden rounded-3xl glass p-7 transition-all duration-500 hover:-translate-y-1"
+          >
+            <div
+              class="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+              style="background: radial-gradient(circle, rgba(11,187,239,0.45), transparent 70%);"
+            />
+
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-2xl border"
+              style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-brand);"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                set:html={ICONS[iconKeys[i]]}
+              />
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <h3 class="font-display text-lg font-bold" style="color: var(--color-text);">
+                {f.title}
+              </h3>
+              <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">
+                {f.text}
+              </p>
+            </div>
+          </article>
+        ))
+    }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,368 @@
+---
+// Mockups visuales de la plataforma (placeholder con SVG inline).
+// Reemplazá los contenidos de cada slide por capturas reales cuando las tengas.
+
+const slides = [
+  {
+    title: "Dashboard de auditoría",
+    desc: "Vista en tiempo real del estado documental de tus contratistas.",
+    accent: "from-[#0bbbef] to-[#7c5cff]",
+    illustration: "dashboard",
+  },
+  {
+    title: "Gestión de contratistas",
+    desc: "Listado completo con filtros, búsqueda y acciones masivas.",
+    accent: "from-[#38d4ff] to-[#0a8ab8]",
+    illustration: "list",
+  },
+  {
+    title: "Alertas y vencimientos",
+    desc: "Notificaciones automáticas antes de cada expiración.",
+    accent: "from-[#7c5cff] to-[#0bbbef]",
+    illustration: "alerts",
+  },
+  {
+    title: "Integraciones empresariales",
+    desc: "Conectores nativos con SAP, Oracle y sistemas de acceso.",
+    accent: "from-[#0bbbef] to-[#38d4ff]",
+    illustration: "integrations",
+  },
+  {
+    title: "Reportes y BI",
+    desc: "Dashboards exportables y conexión con Power BI / Looker.",
+    accent: "from-[#a78bfa] to-[#0bbbef]",
+    illustration: "reports",
+  },
+];
+---
+
+<div class="reveal relative mt-14" data-services-carousel>
+  <!-- Track con scroll-snap nativo -->
+  <div
+    class="services-track flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4"
+    data-track
+  >
+    {
+      slides.map((s, i) => (
+        <article
+          class="snap-center shrink-0 basis-[88%] sm:basis-[72%] md:basis-[58%] lg:basis-[48%]"
+          data-slide={i}
+        >
+          <div
+            class="relative overflow-hidden rounded-3xl border"
+            style="border-color: var(--border-1); aspect-ratio: 16/10; box-shadow: var(--shadow-card);"
+          >
+            <div class={`absolute inset-0 bg-gradient-to-br ${s.accent} opacity-90`} />
+            <div
+              class="absolute inset-0 opacity-30"
+              style="background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.25) 1px, transparent 1px), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.15) 1px, transparent 1px); background-size: 24px 24px, 32px 32px;"
+            />
+
+            <!-- "Window chrome" estilo macOS para que parezca un mockup -->
+            <div class="absolute left-0 right-0 top-0 flex items-center gap-1.5 px-4 py-3">
+              <span class="h-2.5 w-2.5 rounded-full bg-white/40"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-white/40"></span>
+              <span class="h-2.5 w-2.5 rounded-full bg-white/40"></span>
+            </div>
+
+            <!-- Ilustración por slide -->
+            <div class="absolute inset-0 flex items-center justify-center px-10 pt-10">
+              {
+                s.illustration === "dashboard" && (
+                  <svg viewBox="0 0 320 160" class="h-full w-full max-w-md" fill="none">
+                    <rect x="10" y="10" width="80" height="60" rx="8" fill="rgba(255,255,255,0.15)" />
+                    <rect x="100" y="10" width="80" height="60" rx="8" fill="rgba(255,255,255,0.15)" />
+                    <rect x="190" y="10" width="120" height="60" rx="8" fill="rgba(255,255,255,0.15)" />
+                    <path d="M14 40 L40 28 L60 35 L86 22" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <text x="105" y="35" fill="white" font-family="Inter" font-weight="700" font-size="14">2.4M</text>
+                    <text x="105" y="55" fill="rgba(255,255,255,0.7)" font-family="Inter" font-size="10">Documentos</text>
+                    <rect x="200" y="42" width="20" height="20" fill="white" rx="2" opacity="0.5"/>
+                    <rect x="225" y="32" width="20" height="30" fill="white" rx="2" opacity="0.7"/>
+                    <rect x="250" y="22" width="20" height="40" fill="white" rx="2" opacity="0.85"/>
+                    <rect x="275" y="38" width="20" height="24" fill="white" rx="2" opacity="0.6"/>
+                    <rect x="10" y="80" width="300" height="68" rx="8" fill="rgba(255,255,255,0.12)" />
+                    <rect x="22" y="92" width="180" height="6" rx="3" fill="white" opacity="0.5"/>
+                    <rect x="22" y="106" width="240" height="6" rx="3" fill="white" opacity="0.4"/>
+                    <rect x="22" y="120" width="160" height="6" rx="3" fill="white" opacity="0.3"/>
+                    <circle cx="290" cy="114" r="14" fill="white" opacity="0.85"/>
+                  </svg>
+                )
+              }
+              {
+                s.illustration === "list" && (
+                  <svg viewBox="0 0 320 160" class="h-full w-full max-w-md" fill="none">
+                    <rect x="10" y="6" width="300" height="22" rx="6" fill="rgba(255,255,255,0.18)"/>
+                    <rect x="22" y="13" width="80" height="8" rx="4" fill="white" opacity="0.7"/>
+                    {[...Array(5)].map((_, i) => (
+                      <g transform={`translate(0, ${36 + i * 24})`}>
+                        <rect x="10" y="0" width="300" height="20" rx="6" fill="rgba(255,255,255,0.1)"/>
+                        <circle cx="22" cy="10" r="5" fill="white" opacity="0.7"/>
+                        <rect x="34" y="6" width="120" height="4" rx="2" fill="white" opacity="0.7"/>
+                        <rect x="34" y="13" width="60" height="3" rx="1.5" fill="white" opacity="0.4"/>
+                        <rect x="270" y="6" width="32" height="8" rx="4" fill="white" opacity="0.5"/>
+                      </g>
+                    ))}
+                  </svg>
+                )
+              }
+              {
+                s.illustration === "alerts" && (
+                  <svg viewBox="0 0 320 160" class="h-full w-full max-w-md" fill="none">
+                    <circle cx="60" cy="80" r="36" fill="rgba(255,255,255,0.14)"/>
+                    <path d="M48 78a12 12 0 0 1 24 0v8l4 6H44l4-6v-8z" fill="white" opacity="0.95"/>
+                    <circle cx="60" cy="100" r="3" fill="white"/>
+                    <circle cx="76" cy="58" r="4" fill="#ff6b6b"/>
+                    {[...Array(3)].map((_, i) => (
+                      <g transform={`translate(120, ${30 + i * 36})`}>
+                        <rect x="0" y="0" width="180" height="28" rx="6" fill="rgba(255,255,255,0.12)"/>
+                        <rect x="10" y="6" width="6" height="16" rx="3" fill={i === 0 ? "#ff6b6b" : "white"} opacity={i === 0 ? "1" : "0.5"}/>
+                        <rect x="24" y="8" width="100" height="4" rx="2" fill="white" opacity="0.7"/>
+                        <rect x="24" y="16" width="60" height="3" rx="1.5" fill="white" opacity="0.4"/>
+                      </g>
+                    ))}
+                  </svg>
+                )
+              }
+              {
+                s.illustration === "integrations" && (
+                  <svg viewBox="0 0 320 160" class="h-full w-full max-w-md" fill="none">
+                    <circle cx="160" cy="80" r="26" fill="white" opacity="0.95"/>
+                    <text x="160" y="86" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="14" fill="#0a0e1a">IC</text>
+                    {[
+                      { x: 50, y: 40, label: "SAP" },
+                      { x: 270, y: 40, label: "ORACLE" },
+                      { x: 50, y: 120, label: "API" },
+                      { x: 270, y: 120, label: "ACCESS" },
+                    ].map((n) => (
+                      <g>
+                        <line x1="160" y1="80" x2={n.x} y2={n.y} stroke="white" stroke-width="1.5" opacity="0.4" stroke-dasharray="3 3"/>
+                        <circle cx={n.x} cy={n.y} r="22" fill="rgba(255,255,255,0.15)" stroke="white" stroke-opacity="0.4"/>
+                        <text x={n.x} y={n.y + 4} text-anchor="middle" font-family="Inter" font-weight="700" font-size="9" fill="white">{n.label}</text>
+                      </g>
+                    ))}
+                  </svg>
+                )
+              }
+              {
+                s.illustration === "reports" && (
+                  <svg viewBox="0 0 320 160" class="h-full w-full max-w-md" fill="none">
+                    <rect x="10" y="10" width="300" height="140" rx="8" fill="rgba(255,255,255,0.1)"/>
+                    <rect x="22" y="22" width="120" height="8" rx="4" fill="white" opacity="0.7"/>
+                    <rect x="22" y="36" width="80" height="5" rx="2.5" fill="white" opacity="0.4"/>
+                    {[...Array(8)].map((_, i) => {
+                      const h = 30 + Math.sin(i * 1.3) * 25 + i * 4;
+                      return (
+                        <rect x={28 + i * 34} y={130 - h} width="22" height={h} rx="4" fill="white" opacity={0.4 + (i % 3) * 0.2}/>
+                      );
+                    })}
+                    <line x1="22" y1="130" x2="298" y2="130" stroke="white" stroke-opacity="0.3"/>
+                  </svg>
+                )
+              }
+            </div>
+
+            <div
+              class="absolute bottom-0 left-0 right-0 px-6 py-5"
+              style="background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);"
+            >
+              <h3 class="font-display text-base font-bold text-white md:text-lg">
+                {s.title}
+              </h3>
+              <p class="mt-1 max-w-md text-xs text-white/85 md:text-sm">
+                {s.desc}
+              </p>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <!-- Controls -->
+  <div class="mt-5 flex items-center justify-center gap-4">
+    <button
+      type="button"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:-translate-x-0.5"
+      style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-text);"
+      data-prev
+      aria-label="Anterior"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <div class="flex items-center gap-2" data-dots>
+      {
+        slides.map((_, i) => (
+          <button
+            type="button"
+            class="dot h-1.5 rounded-full transition-all"
+            data-dot={i}
+            aria-label={`Ir al slide ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+
+    <button
+      type="button"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:translate-x-0.5"
+      style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-text);"
+      data-next
+      aria-label="Siguiente"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M8 4l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .services-track {
+    scrollbar-width: none;
+  }
+  .services-track::-webkit-scrollbar {
+    display: none;
+  }
+  .dot {
+    width: 18px;
+    background: var(--overlay-3);
+  }
+  .dot[aria-current="true"] {
+    width: 28px;
+    background: var(--color-brand);
+  }
+</style>
+
+<script>
+  const init = () => {
+    const root = document.querySelector<HTMLElement>("[data-services-carousel]");
+    if (!root || (root as any).__inited) return;
+    (root as any).__inited = true;
+
+    const track = root.querySelector<HTMLElement>("[data-track]")!;
+    const slides = Array.from(
+      track.querySelectorAll<HTMLElement>("[data-slide]")
+    );
+    const dots = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-dot]")
+    );
+    const prev = root.querySelector<HTMLButtonElement>("[data-prev]")!;
+    const next = root.querySelector<HTMLButtonElement>("[data-next]")!;
+
+    let current = 0;
+
+    const updateDots = () => {
+      dots.forEach((d, i) =>
+        d.setAttribute("aria-current", i === current ? "true" : "false")
+      );
+    };
+
+    // Animación manual del scroll horizontal — funciona aunque el sistema
+    // tenga prefers-reduced-motion activado.
+    // Importante: el track tiene CSS scroll-snap que forzaría a los snap
+    // points y rompería la animación; lo desactivamos mientras animamos.
+    let scrollAnim: number | null = null;
+    const animateTrackTo = (targetLeft: number, duration = 650) => {
+      if (scrollAnim !== null) cancelAnimationFrame(scrollAnim);
+      const start = track.scrollLeft;
+      const distance = targetLeft - start;
+      if (Math.abs(distance) < 1) return;
+
+      track.style.scrollSnapType = "none";
+
+      const startTime = performance.now();
+      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      const step = (now: number) => {
+        const t = Math.min((now - startTime) / duration, 1);
+        track.scrollLeft = start + distance * easeOutCubic(t);
+        if (t < 1) {
+          scrollAnim = requestAnimationFrame(step);
+        } else {
+          scrollAnim = null;
+          // Restaurar el snap al terminar (vuelve a tomar el del CSS).
+          // Damos un frame extra para que el browser asiente la posición.
+          requestAnimationFrame(() => {
+            track.style.scrollSnapType = "";
+          });
+        }
+      };
+      scrollAnim = requestAnimationFrame(step);
+    };
+
+    const goTo = (i: number, duration = 650) => {
+      current = (i + slides.length) % slides.length;
+      const slide = slides[current];
+      // Centrar el slide objetivo en el viewport del track
+      const targetLeft =
+        slide.offsetLeft - (track.clientWidth - slide.clientWidth) / 2;
+      animateTrackTo(
+        Math.max(0, Math.min(targetLeft, track.scrollWidth - track.clientWidth)),
+        duration
+      );
+      updateDots();
+    };
+
+    prev.addEventListener("click", () => goTo(current - 1));
+    next.addEventListener("click", () => goTo(current + 1));
+    dots.forEach((d, i) => d.addEventListener("click", () => goTo(i)));
+
+    // Cancelar la animación si el usuario interactúa con el track manualmente
+    track.addEventListener(
+      "wheel",
+      () => {
+        if (scrollAnim !== null) cancelAnimationFrame(scrollAnim);
+        scrollAnim = null;
+      },
+      { passive: true }
+    );
+    track.addEventListener(
+      "touchstart",
+      () => {
+        if (scrollAnim !== null) cancelAnimationFrame(scrollAnim);
+        scrollAnim = null;
+      },
+      { passive: true }
+    );
+
+    // Sincronizar dots con scroll manual (drag, swipe)
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting && e.intersectionRatio > 0.6) {
+            const i = slides.indexOf(e.target as HTMLElement);
+            if (i >= 0 && i !== current) {
+              current = i;
+              updateDots();
+            }
+          }
+        }
+      },
+      { root: track, threshold: [0.6] }
+    );
+    slides.forEach((s) => io.observe(s));
+
+    // Auto-play (pausa al hover/focus)
+    let auto: number | null = null;
+    const start = () => {
+      stop();
+      auto = window.setInterval(() => goTo(current + 1), 5000);
+    };
+    const stop = () => {
+      if (auto !== null) clearInterval(auto);
+      auto = null;
+    };
+    root.addEventListener("mouseenter", stop);
+    root.addEventListener("mouseleave", start);
+    root.addEventListener("focusin", stop);
+    root.addEventListener("focusout", start);
+
+    updateDots();
+    start();
+  };
+
+  init();
+  document.addEventListener("astro:page-load", init);
+</script>

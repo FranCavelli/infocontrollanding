@@ -1,0 +1,248 @@
+---
+import "~/styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import type { Locale } from "~/i18n/translations";
+
+interface Props {
+  title?: string;
+  description?: string;
+  locale?: Locale;
+}
+
+const {
+  title = "Infocontrol — Inteligencia Artificial aplicada al control de Contratistas",
+  description = "Plataforma SaaS con IA para administrar y auditar la documentación de contratistas y RRHH tercerizados. Mitigá riesgos de la tercerización en LATAM.",
+  locale = "es",
+} = Astro.props;
+
+const htmlLang = locale === "es" ? "es" : locale === "en" ? "en" : "pt";
+---
+
+<!doctype html>
+<html lang={htmlLang} data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="theme-color"
+      content="#fbfbfd"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#050810"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={import.meta.env.BASE_URL.replace(/\/?$/, "/") + "favicon.svg"}
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    />
+
+    <ClientRouter />
+
+    <!-- Aplicar tema antes del primer paint para evitar FOUC -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem("ic-theme");
+          var theme;
+          if (saved === "dark" || saved === "light") {
+            theme = saved;
+          } else {
+            // Sin preferencia guardada: respetar el tema del sistema
+            theme =
+              window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          }
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="pointer-events-none fixed inset-0 -z-10 grid-bg opacity-50"></div>
+    <slot />
+
+    <script>
+      // Reveal on scroll — re-enganchar tras cada navegación SPA (ClientRouter)
+      let io: IntersectionObserver | null = null;
+
+      const observe = () => {
+        io?.disconnect();
+        io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                (entry.target as HTMLElement).classList.add("is-visible");
+                io?.unobserve(entry.target);
+              }
+            }
+          },
+          // Trigger cuando la card alcanza ~75% del viewport (cards aparecen
+          // una a una a medida que el usuario hace scroll, no en bloque).
+          { threshold: 0.1, rootMargin: "0px 0px -22% 0px" }
+        );
+        document
+          .querySelectorAll<HTMLElement>(".reveal:not(.is-visible)")
+          .forEach((el) => io!.observe(el));
+      };
+
+      observe();
+      document.addEventListener("astro:page-load", observe);
+
+      // Tema (light/dark) — toggle global, persistido en localStorage
+      const applyTheme = (t: "light" | "dark") => {
+        document.documentElement.setAttribute("data-theme", t);
+        try {
+          localStorage.setItem("ic-theme", t);
+        } catch (e) {}
+      };
+      const handleThemeToggle = (e: Event) => {
+        const btn = (e.target as HTMLElement)?.closest<HTMLButtonElement>(
+          "[data-theme-toggle]"
+        );
+        if (!btn) return;
+        e.preventDefault();
+        const current = document.documentElement.getAttribute("data-theme");
+        applyTheme(current === "dark" ? "light" : "dark");
+      };
+      document.addEventListener("click", handleThemeToggle);
+      // Resolver el tema "efectivo" tomando en cuenta el sistema si no hay
+      // preferencia guardada por el usuario.
+      const resolveTheme = (): "light" | "dark" => {
+        const saved = localStorage.getItem("ic-theme");
+        if (saved === "dark" || saved === "light") return saved;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      };
+
+      // Mantener tema tras cada navegación SPA
+      document.addEventListener("astro:after-swap", () => {
+        document.documentElement.setAttribute("data-theme", resolveTheme());
+      });
+
+      // Reaccionar a cambios del tema del sistema cuando el usuario NO ha
+      // elegido manualmente (es decir, no hay valor en localStorage).
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", (e) => {
+          if (localStorage.getItem("ic-theme")) return;
+          document.documentElement.setAttribute(
+            "data-theme",
+            e.matches ? "dark" : "light"
+          );
+        });
+
+      // Scroll suave a anclas internas (#id). Solo dispara en clicks
+      // explícitos a anchors — el scroll normal con la rueda queda nativo.
+      // Usamos capture phase + stopPropagation para correr ANTES que el
+      // ClientRouter de Astro, que si no haría una nav SPA y un jump al top.
+      const HEADER_OFFSET = 88;
+
+      // Smooth scroll manual con rAF — funciona aunque el sistema tenga
+      // "reducir movimiento" activado (que es lo que cancela behavior:smooth).
+      let scrollAnim: number | null = null;
+      const smoothScrollToY = (targetY: number, duration = 850) => {
+        const startY = window.scrollY;
+        const distance = targetY - startY;
+        if (Math.abs(distance) < 2) return;
+        const startTime = performance.now();
+        const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+        const cancelOnUser = () => {
+          if (scrollAnim !== null) cancelAnimationFrame(scrollAnim);
+          scrollAnim = null;
+          window.removeEventListener("wheel", cancelOnUser);
+          window.removeEventListener("touchstart", cancelOnUser);
+        };
+        window.addEventListener("wheel", cancelOnUser, { passive: true });
+        window.addEventListener("touchstart", cancelOnUser, { passive: true });
+
+        const step = (now: number) => {
+          const t = Math.min((now - startTime) / duration, 1);
+          window.scrollTo(0, startY + distance * easeOutCubic(t));
+          if (t < 1) {
+            scrollAnim = requestAnimationFrame(step);
+          } else {
+            scrollAnim = null;
+            window.removeEventListener("wheel", cancelOnUser);
+            window.removeEventListener("touchstart", cancelOnUser);
+          }
+        };
+
+        if (scrollAnim !== null) cancelAnimationFrame(scrollAnim);
+        scrollAnim = requestAnimationFrame(step);
+      };
+
+      const smoothScrollTo = (target: HTMLElement, duration = 850) => {
+        const targetY =
+          target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+        smoothScrollToY(targetY, duration);
+      };
+      const smoothScrollToTop = (duration = 850) =>
+        smoothScrollToY(0, duration);
+
+      const handleAnchorClick = (e: MouseEvent) => {
+        if (
+          e.button !== 0 ||
+          e.ctrlKey ||
+          e.metaKey ||
+          e.shiftKey ||
+          e.altKey
+        )
+          return;
+        const a = (e.target as HTMLElement)?.closest<HTMLAnchorElement>("a[href]");
+        if (!a) return;
+        // No interceptar links externos, descargas, ni los que abren nueva pestaña
+        if (a.target === "_blank" || a.hasAttribute("download")) return;
+        const url = new URL(a.href, location.href);
+        if (url.origin !== location.origin) return;
+        if (url.pathname !== location.pathname) return;
+
+        if (url.hash) {
+          // Anchor a una sección
+          const target = document.querySelector<HTMLElement>(url.hash);
+          if (!target) return;
+          e.preventDefault();
+          e.stopPropagation();
+          smoothScrollTo(target);
+          history.replaceState(null, "", url.hash);
+        } else {
+          // Mismo path, sin hash (ej: logo) → scroll al top en vez de recargar
+          e.preventDefault();
+          e.stopPropagation();
+          smoothScrollToTop();
+          if (location.hash) history.replaceState(null, "", location.pathname);
+        }
+      };
+      // capture: true → corremos antes que ClientRouter
+      document.addEventListener("click", handleAnchorClick, true);
+
+      document.addEventListener("astro:page-load", () => {
+        if (location.hash) {
+          const t = document.querySelector<HTMLElement>(location.hash);
+          if (t) requestAnimationFrame(() => smoothScrollTo(t));
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,138 @@
+---
+import Logo from "./Logo.astro";
+import { getT, localizePath, type Locale } from "~/i18n/translations";
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = "es" } = Astro.props;
+const t = getT(locale).footer;
+
+const home = localizePath("/", locale);
+
+const cols = [
+  {
+    title: t.cols.producto,
+    links: [
+      { label: t.links.servicios, href: `${home}#servicios` },
+      { label: t.links.ia, href: `${home}#ia` },
+      { label: t.links.funcionalidades, href: `${home}#funcionalidades` },
+      { label: t.links.integraciones, href: `${home}#integraciones` },
+    ],
+  },
+  {
+    title: t.cols.empresa,
+    links: [
+      { label: t.links.clientes, href: `${home}#clientes` },
+      { label: t.links.casos, href: "#casos" },
+      { label: t.links.noticias, href: "#noticias" },
+      { label: t.links.contacto, href: `${home}#contacto` },
+    ],
+  },
+  {
+    title: t.cols.legal,
+    links: [
+      { label: t.links.terminos, href: "#terminos" },
+      { label: t.links.privacidad, href: "#privacidad" },
+      { label: t.links.cookies, href: "#cookies" },
+    ],
+  },
+];
+---
+
+<footer class="relative pt-20 pb-10" style="border-top: 1px solid var(--border-1);">
+  <div class="container-pad">
+    <div class="grid gap-12 md:grid-cols-[1.5fr_2fr]">
+      <div>
+        <Logo locale={locale} />
+        <p class="mt-5 max-w-sm text-sm" style="color: var(--color-text-muted);">
+          {t.desc}
+        </p>
+
+        <a
+          href="mailto:contacto@infocontrol.io"
+          class="mt-6 inline-flex items-center gap-2 text-sm transition-colors hover:text-[color:var(--color-brand)]"
+          style="color: var(--color-text);"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3 6l7 5 7-5M3 6v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6M3 6l1-1h12l1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          contacto@infocontrol.io
+        </a>
+
+        <div class="mt-6 flex items-center gap-3">
+          {
+            [
+              { name: "linkedin", path: 'M4.98 3.5a2.5 2.5 0 1 1 .04 5 2.5 2.5 0 0 1-.04-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.5c0-1.32-.02-3.02-1.84-3.02-1.84 0-2.12 1.44-2.12 2.93V21H9V9z' },
+              { name: "facebook", path: 'M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5h1.65V4.6c-.3 0-1.3-.1-2.45-.1-2.42 0-4.05 1.45-4.05 4.1v2.3H7.5V14h2.7v8h3.3z' },
+            ].map((s) => (
+              <a
+                href={`#${s.name}`}
+                aria-label={s.name}
+                class="inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all hover:text-[color:var(--color-text)]"
+                style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-text-muted);"
+              >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d={s.path}/>
+                </svg>
+              </a>
+            ))
+          }
+          <a
+            href="#instagram"
+            aria-label="Instagram"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full border transition-all hover:text-[color:var(--color-text)]"
+            style="border-color: var(--border-1); background: var(--overlay-1); color: var(--color-text-muted);"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
+        {
+          cols.map((col) => (
+            <div>
+              <p class="text-xs uppercase tracking-wider" style="color: var(--color-text-dim);">
+                {col.title}
+              </p>
+              <ul class="mt-4 space-y-2.5">
+                {col.links.map((l) => (
+                  <li>
+                    <a
+                      href={l.href}
+                      class="text-sm transition-colors hover:text-[color:var(--color-text)]"
+                      style="color: var(--color-text-muted);"
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div
+      class="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4 pt-8 text-xs"
+      style="border-top: 1px solid var(--border-1); color: var(--color-text-dim);"
+    >
+      <p>© {new Date().getFullYear()} Infocontrol SAS. {t.rights}</p>
+      <div class="flex flex-wrap items-center gap-6 md:ml-auto">
+        <span class="inline-flex items-center gap-2">
+          <span class="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--color-brand)]"></span>
+          ISO 9001
+        </span>
+        <span>IRAM / IQNet</span>
+        <span>Startup CORFO</span>
+        <span>AAIP RNBD</span>
+      </div>
+    </div>
+  </div>
+</footer>
